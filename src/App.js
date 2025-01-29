@@ -83,18 +83,22 @@ function App() {
       alert("You are offline. Cannot add a new user.");
       return;
     }
-
-    const newUser = { id: users.length + 1, ...formData };
-
+  
+    // Generate a unique ID (greater than any existing one)
+    const newId = users.length > 0 ? Math.max(...users.map(user => user.id)) + 1 : 1;
+  
+    const newUser = { id: newId, ...formData };
+  
     axios.post('https://jsonplaceholder.typicode.com/users', newUser)
       .then(response => {
-        setUsers([...users, response.data]);
+        setUsers([...users, { ...response.data, id: newId }]); // Ensure unique ID
         closeModal();
       })
       .catch(() => {
         setError("Failed to add user. Please try again.");
       });
   };
+  
 
   const handleEdit = (user) => {
     if (isOffline) {
