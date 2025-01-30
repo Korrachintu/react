@@ -1,6 +1,6 @@
 /* General Styles */
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Roboto', sans-serif;
   background-color: #f4f4f9;
   margin: 0;
   padding: 0;
@@ -41,7 +41,8 @@ h1 {
 }
 
 h2 {
-  color: #264653;
+  color: #429daf;
+  font-family: 'Roboto', sans-serif;
   font-size: 22px;
   margin-top: 20px;
 }
