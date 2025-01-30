@@ -21,8 +21,23 @@ body {
 
 /* Headings */
 h1 {
-  color: #2a9d8f;
+  color: #741fb0;
   font-size: 28px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% {
+      opacity: 1;
+  }
+
+  50% {
+      opacity: 0;
+  }
+
+  100% {
+      opacity: 1;
+  }
 }
 
 h2 {
@@ -177,4 +192,60 @@ button.cancel {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+.edit, .delete {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.edit {
+  background-color: #ffc107;
+  color: black;
+}
+
+.delete {
+  background-color: #f44336;
+  color: white;
+}
+
+.edit:hover {
+  background-color: #e0a800;
+}
+
+.delete:hover {
+  background-color: #d32f2f;
+}
+@media (max-width: 768px) {
+  table {
+    width: 100%;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  th, td {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+@media (max-width: 500px) {
+  .modal {
+    width: 90%;
+    height: auto;
+    padding: 20px;
+  }
+
+  .modal input {
+    width: 100%;
+  }
+}
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
 }

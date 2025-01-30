@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
+import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import './App.css';
 
 Modal.setAppElement('#root');
@@ -15,6 +16,7 @@ function App() {
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [currentPage, setCurrentPage] = useState(1); // Pagination state
   const [totalPages, setTotalPages] = useState(0); // Total number of pages
+  const [errors, setErrors] = useState({});
   
   const usersPerPage = 10; // Number of users to fetch per page
 
@@ -32,6 +34,32 @@ function App() {
       window.removeEventListener('offline', handleOffline);
     };
   }, []);
+
+  const validateForm = () => {
+    let errors = {};
+  
+    if (!formData.firstName.trim()) {
+      errors.firstName = "First Name is required";
+    }
+  
+    if (!formData.lastName.trim()) {
+      errors.lastName = "Last Name is required";
+    }
+  
+    if (!formData.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = "Invalid email format";
+    }
+  
+    if (!formData.department.trim()) {
+      errors.department = "Department is required";
+    }
+  
+    setErrors(errors);
+    return Object.keys(errors).length === 0; // Returns true if no errors
+  };
+  
 
   // Fetch users when online
   useEffect(() => {
@@ -83,6 +111,7 @@ function App() {
       alert("You are offline. Cannot add a new user.");
       return;
     }
+    if (!validateForm()) return; //stop when validation fails
   
     // Generate a unique ID (greater than any existing one)
     const newId = users.length > 0 ? Math.max(...users.map(user => user.id)) + 1 : 1;
@@ -117,6 +146,7 @@ function App() {
       alert("You are offline. Cannot update users.");
       return;
     }
+    if (!validateForm()) return;
 
     const updatedUser = { ...formData, id: editUserId };
 
@@ -152,12 +182,12 @@ function App() {
 
   return (
     <div className="container">
-      <h1>User Management Dashboard</h1>
+      <h1>USER MANAGEMENT DASHBOARD</h1>
 
       {isOffline && <p className="offline-warning">⚠️ You are offline. Some actions may not work.</p>}
       {error && <p className="error">{error}</p>}
 
-      <button className="add-user-btn" onClick={openModal}>+ Add User</button>
+      <button className="add-user-btn" onClick={openModal}><FaPlus /> Add User</button>
 
       <h2>User List</h2>
       <table>
@@ -180,8 +210,8 @@ function App() {
               <td>{user.email}</td>
               <td>{user.department}</td>
               <td>
-                <button className="edit" onClick={() => handleEdit(user)}>Edit</button>
-                <button className="delete" onClick={() => deleteUser(user.id)}>Delete</button>
+                <button className="edit" onClick={() => handleEdit(user)}><FaEdit />Edit</button>
+                <button className="delete" onClick={() => deleteUser(user.id)}><FaTrash />Delete</button>
               </td>
             </tr>
           ))}
@@ -210,6 +240,8 @@ function App() {
           onChange={handleInputChange}
           required
         />
+        {errors.firstName && <p className="error-text">{errors.firstName}</p>}
+
         <input
           type="text"
           name="lastName"
@@ -218,6 +250,8 @@ function App() {
           onChange={handleInputChange}
           required
         />
+        {errors.lastName && <p className="error-text">{errors.lastName}</p>}
+
         <input
           type="email"
           name="email"
@@ -226,6 +260,8 @@ function App() {
           onChange={handleInputChange}
           required
         />
+        {errors.email && <p className="error-text">{errors.email}</p>}
+
         <input
           type="text"
           name="department"
@@ -234,6 +270,8 @@ function App() {
           onChange={handleInputChange}
           required
         />
+        {errors.department && <p className="error-text">{errors.department}</p>}
+
         <div className="modal-buttons">
           <button className="save" onClick={editMode ? updateUser : addUser}>
             {editMode ? 'Update' : 'Add'}
