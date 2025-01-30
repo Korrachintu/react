@@ -206,6 +206,8 @@ button.cancel {
 .edit {
   background-color: #ffc107;
   color: black;
+  margin-bottom: 10px;
+  padding-right: 25px;
 }
 
 .delete {
